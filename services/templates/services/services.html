@@ -1,3 +1,4 @@
+{% load static from staticfiles %}
 <!DOCTYPE html>
 <html>
 
@@ -23,7 +24,7 @@
         <nav class="navbar navbar-default navbar-fixed-top navigation-clean">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand navbar-link" href="/"><img src="img/logo1IT.png"> IT Tools</a>
+                    <a class="navbar-brand navbar-link" href="/"><img src="/static/img/logo1IT.png"> IT Tools</a>
                     <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
@@ -56,32 +57,24 @@
                 <h2 class="text-center">Сервисы IT STV</h2>
             </div>
             <div class="row projects">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 item">
-                    <img class="img-responsive" src="img/desk.jpg">
-                    <h3 class="name">Project Name</h3>
-                    <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, interdum justo suscipit id.</p>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 item">
-                    <img class="img-responsive" src="img/building.jpg">
-                    <h3 class="name">Project Name</h3>
-                    <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, interdum justo suscipit id.</p>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 item">
-                    <img class="img-responsive" src="img/loft.jpg">
-                    <h3 class="name">Project Name</h3>
-                    <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, interdum justo suscipit id.</p>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 item">
-                    <img class="img-responsive" src="img/minibus.jpeg">
-                    <h3 class="name">Project Name</h3>
-                    <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, interdum justo suscipit id.</p>
-                </div>
+                {% for service in services %}
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 item">
+                        <img class="img-responsive" src="{% static service.image %}">
+                        <h3 class="name">{{ service.name }}</h3>
+                        <p class="description">{{ service.description }}</p>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
     <div class="footer-basic">
         <footer>
-            <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+            <div class="social">
+                <a href="#"><i class="icon ion-social-instagram"></i></a>
+                <a href="#"><i class="icon ion-social-snapchat"></i></a>
+                <a href="#"><i class="icon ion-social-twitter"></i></a>
+                <a href="#"><i class="icon ion-social-facebook"></i></a>
+            </div>
             <ul class="list-inline">
                 <li><a href="/">Home</a></li>
                 <li><a href="/services/">Services</a></li>
