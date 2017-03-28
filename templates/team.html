@@ -37,7 +37,7 @@
                         <li role="presentation">
                             <a href="/">Главная </a>
                         </li>
-                        <li role="presentation">
+                        <li class="active" role="presentation">
                             <a href="/team/">Сотрудники </a>
                         </li>
                         <li class="dropdown">
@@ -51,19 +51,29 @@
             </div>
         </nav>
     </div>
-    <div class="projects-clean">
+    <div class="team-boxed">
         <div class="container">
             <div class="intro">
-                <h2 class="text-center">Сервисы IT STV</h2>
+                <h2 class="text-center">Наша команда</h2>
             </div>
-            <div class="row projects">
-                {% for service in services %}
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 item">
-                        <img class="img-responsive" src="{% static service.image %}">
-                        <h3 class="name">{{ service.name }}</h3>
-                        <p class="description">{{ service.description }}</p>
+            <div class="row people">
+                {% for person in team %}
+                    <a href="/team/{{ person.id}}/">
+                    <div class="col-lg-4 col-md-4 col-sm-6 item">
+                        <div class="box">
+                            <img class="img-circle" src="{% static person.image %}">
+                            <h3 class="name">{{ person.first_name }} {{ person.last_name }}</h3>
+                            <p class="title">{{ person.position }}</p>
+                            <p class="description">{{ person.description }} </p>                        
+                            <div class="social">
+                                <a href="#"><i class="fa fa-facebook-official"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                            </div>
+                        </div>
                     </div>
-                {% endfor %}
+                    </a>
+                {% endfor %} 
             </div>
         </div>
     </div>
@@ -78,7 +88,7 @@
             <ul class="list-inline">
                 <li><a href="/">Home</a></li>
                 <li><a href="/services/">Services</a></li>
-                <li><a href="/team/">Team </a></li>
+                <li><a href="/team/">Team</a></li>
             </ul>
             <p class="copyright">STV rexxx © 2017</p>
         </footer>
