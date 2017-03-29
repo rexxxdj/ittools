@@ -12,8 +12,13 @@
                 {% for person in team %}
                     <a href="/team/{{ person.id}}/">
                     <div class="col-lg-4 col-md-4 col-sm-6 item">
-                        <div class="box">
-                            <img class="img-circle" src="{% static person.image %}">
+                        <div class="box">        
+                            <img class="img-circle" src="{% static 'img/default_user.jpg' %}">
+                            <!-- {% if person.photo %}
+                                <img class="img-circle" src="{{ person.photo.url }}">
+                            {% else %}
+                                <img class="img-circle" src="{% static 'img/default_user.jpg' %}">
+                            {% endif %} -->
                             <h3 class="name">{{ person.first_name }} {{ person.last_name }}</h3>
                             <p class="title">{{ person.position }}</p>
                             <p class="description">{{ person.description }} </p>                        

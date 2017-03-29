@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from models import Team
 
 def team_list(request):
-    team = (
+    team = Team.objects.all()
+    """team = (
         {'id': 1,
          'first_name': u'Ben',
          'last_name': u'Johnson',
@@ -21,7 +23,7 @@ def team_list(request):
          'position': u'Stylist',
          'description': u'Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et interdum justo suscipit id. Etiam dictum feugiat tellus, a semper massa.',         
          'image':'img/3.jpg'}
-    )
+    )"""
     return render(request,'team.html',{'team': team})
 
 def team_unit(request,uid):
