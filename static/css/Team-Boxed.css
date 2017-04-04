@@ -69,7 +69,8 @@
 }
 
 .team-boxed .item img {
-  max-width:160px;
+  width:200px;
+  height: 200px;
 }
 
 .team-boxed .social {

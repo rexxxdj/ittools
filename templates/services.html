@@ -12,8 +12,12 @@
                 {% for service in services %}
                     <a href="/services/{{ service.id }}/">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 item">
-                            <img class="img-responsive" src="{% static service.image %}">
-                            <h3 class="name">{{ service.name }}</h3>
+                            {% if service.photo %}
+                                <img class="project-img" src="media/{{ service.photo }}">
+                            {% else %}
+                                <img class="project-img" src="{% static 'img/no_photo.png' %}">
+                            {% endif %}
+                            <h3 class="name">{{ service.project_name }}</h3>
                             <p class="description">{{ service.description }}</p>
                         </div>
                     </a>
