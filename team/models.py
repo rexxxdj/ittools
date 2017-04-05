@@ -37,7 +37,7 @@ class Team(models.Model):
     
     photo = models.FileField(
         upload_to='img/team/',
-        verbose_name = u'Фото 320*320',
+        verbose_name = u'Фото min 320*320',
         blank=True,
         null=True)
     

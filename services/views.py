@@ -1,6 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
 from models import Services
+
+#####
+from calendar import HTMLCalendar
+from datetime import date
+from itertools import groupby
+from django.utils.html import conditional_escape as esc
+from django.utils.safestring import mark_safe
+#####
 
 def service_list(request):
     services = Services.objects.all() 
@@ -30,3 +38,4 @@ def service_unit(request,sid):
         }
     )
     return render(request,'services.html',{'services': services})
+

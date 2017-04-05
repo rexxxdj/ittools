@@ -21,7 +21,7 @@ class Services(models.Model):
     
     photo = models.FileField(
         upload_to='img/services/',
-        verbose_name = u'Фото 640*426',
+        verbose_name = u'Фото min 400*400',
         blank=True,
         null=True)
     
