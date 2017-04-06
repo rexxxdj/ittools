@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}STV IT Tools{% endblock title %}</title>
+    <title>{% block meta_title %}STV IT Tools{% endblock meta_title %}</title>
     <link rel="icon" href="/static/img/logo1IT.png" type="image/x-icon" />
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/fonts/font-awesome.min.css">
@@ -50,6 +50,8 @@
             </div>
         </nav>
     </div>
+    {% block title %}
+    {% endblock title %}
     {% block content %}
     
     {% endblock content %}
