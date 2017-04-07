@@ -10,7 +10,7 @@
             </div>
             <div class="row projects">
                 {% for service in services %}
-                    <a href="/services/{{ service.id }}/">
+                    <a href="{{ service.link }}">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 item">
                             {% if service.photo %}
                                 <img class="project-img" src="media/{{ service.photo }}">

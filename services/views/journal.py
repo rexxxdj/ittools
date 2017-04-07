@@ -21,11 +21,12 @@ class JournalView(TemplateView):
         else:
             today = datetime.today()
             month = date(today.year, today.month,1)
+        next_month=date(month.year, month.month+1,1)
+        prev_month=date(month.year, month.month-1,1)  
         
-        next_month=month + relativedelta(month=1)
-        prev_month=month - relativedelta(month=1)        
+        print(prev_month,month,next_month)
         context['prev_month'] = prev_month.strftime('%Y-%m-%d')
-        context['prev_month'] = next_month.strftime('%Y-%m-%d')
+        context['next_month'] = next_month.strftime('%Y-%m-%d')
         context['year'] = month.year
         context['month_verbose'] = month.strftime('%B')
         context['cur_month'] = month.strftime('%Y-%m-%d')
