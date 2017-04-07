@@ -9,3 +9,16 @@
 a, a:hover, a:active, a:focus {
   text-decoration: none;   
 }
+
+td.day-box, th.day-header {
+    padding: 4px !important;
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+textarea, select, input {
+    max-width: 300px;
+}
+col-sm-10 {
+    float: right;
+}

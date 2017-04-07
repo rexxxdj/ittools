@@ -10,63 +10,72 @@
 <br>
 <br>
 <br>
-<div class="intro">
-    <h2 class="text-center">График Дежурств IT STV (8:00) </h2>
-</div>
-<br>
-{% if not team %}
-<div class="alert alert-warning">
-    Пока нет ниодного сотрудника. Пожалуйста, добавьте первого.
-</div>
-{% else %}
-<p id="jornal-nav" class="text-center">
-    <a href="?month={{ prev_month }}" title="Предыдущий месяц">&larr;</a>
-    <strong>{{ month_verbose }} {{ year }}</strong>
-    <a href="?month={{ next_month }}" title="Следующий месяц">&rarr;</a>
-</p>
-<table class="table table-hover table-stripped table-bordered" id="team-journal">
-    <thead>
-        <tr class="header">
-            <th class="num">#</th>
-            <th>Сотрудник</th>
-            {% for day in month_header %}
-            <th class="day-header">
-                {{ day.verbose}}
-                <br/>
-                {{ day.day }}
-            </th>
+<div class="container">
+    <div class="intro">
+        <h2 class="text-center">График Дежурств IT STV (8:00) </h2>
+    </div>
+    <br>
+    {% if not team %}
+    <div class="alert alert-warning">
+        Пока нет ниодного сотрудника. Пожалуйста, добавьте первого.
+    </div>
+    {% else %}
+    <div class="alert">
+        Изменения в журнал сохраняются автоматически при каждом клике на ячейках.
+    </div>
+
+    <p id="jornal-nav" class="text-center">
+        <a href="?month={{ prev_month }}" title="Предыдущий месяц">&larr;</a>
+        <strong>{{ month_verbose }} {{ year }}</strong>
+        <a href="?month={{ next_month }}" title="Следующий месяц">&rarr;</a>
+    </p>
+    <table class="table table-hover table-stripped table-bordered" id="team-journal">
+        <thead>
+            <tr class="header">
+                <th class="num">#</th>
+                <th>Сотрудник</th>
+                {% for day in month_header %}
+                <th class="day-header">
+                    {{ day.verbose}}
+                    <br/>
+                    {{ day.day }}
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% csrf_token %}
+            {% for unit in team %}
+            <tr>
+                <td>
+                    {% if is_paginated %}
+                        {{ page_obj.start_index|add:forloop.counter|add:"-1" }}
+                    {% else %}
+                        {{ forloop.counter }}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ unit.full_name }}
+                </td>
+                {% for day in unit.days %}
+                <td class="day-box">
+                    <input type="checkbox" 
+                           data-unit-id="{{ unit.id }}"
+                           data-date="{{ day.date }}"
+                           data-url="{{ unit.update_url }}"
+                           value="1"
+                           {% if day.present %}
+                            checked="checked" 
+                           {% endif %} />                
+                </td>
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% csrf_token %}
-        {% for unit in team %}
-        <tr>
-            <td>
-                {% if is_paginated %}
-                    {{ page_obj.start_index|add:forloop.counter|add:"-1" }}
-                {% else %}
-                    {{ forloop.counter }}
-                {% endif %}
-            </td>
-            <td>
-                {{ unit.full_name }}
-            </td>
-            {% for day in unit.days %}
-            <td class="day-box">
-                <input type="checkbox" 
-                       data-unit-id="{{ unit.id }}"
-                       data-date="{{ day.date }}"
-                       data-url="{{ unit.update_url }}"
-                       value="1"
-                       {% if day.present %}
-                        checked="checked" 
-                       {% endif %} />                
-            </td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% endif %}
+        </tbody>
+    </table>
+    {% endif %}
+    {% with object_list=team %}
+        {% include "pagination.html" %}
+    {% endwith %}
+</div>
 {% endblock content %}

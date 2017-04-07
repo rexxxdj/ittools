@@ -2,6 +2,7 @@
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 from calendar import monthrange, weekday, day_abbr
+from django.http import JsonResponse
 
 from django.core.urlresolvers import reverse
 from django.views.generic.base import TemplateView
@@ -19,7 +20,7 @@ class JournalView(TemplateView):
             month=datetime.strptime(self.request.GET['month'], '%Y-%m-%d').date()
         else:
             today = datetime.today()
-            month = date(today.year, today.month,5)
+            month = date(today.year, today.month,1)
         
         next_month=month + relativedelta(month=1)
         prev_month=month - relativedelta(month=1)        
@@ -63,3 +64,40 @@ class JournalView(TemplateView):
         context = paginate(team, 10, self.request, context,var_name='team')   
         
         return context
+    
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        current_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
+        month = date(current_date.year, current_date.month,1)
+        present = data['present'] and True or False        
+        worker = teammodel.Team.objects.get(pk=data['pk'])
+        
+        journal = Month8Journal.objects.get_or_create(worker=worker,date=month)[0]
+        
+        setattr(journal, 'day%d' % current_date.day, present)
+        print(journal)
+        journal.save()
+        
+        return JsonResponse({'status': 'success'})
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
