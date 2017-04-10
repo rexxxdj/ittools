@@ -24,7 +24,7 @@ class JournalView(TemplateView):
         next_month=date(month.year, month.month+1,1)
         prev_month=date(month.year, month.month-1,1)  
         
-        print(prev_month,month,next_month)
+        #print(prev_month,month,next_month)
         context['prev_month'] = prev_month.strftime('%Y-%m-%d')
         context['next_month'] = next_month.strftime('%Y-%m-%d')
         context['year'] = month.year
@@ -37,7 +37,7 @@ class JournalView(TemplateView):
             'verbose': day_abbr[weekday(myear,mmonth,d)][:2]}
             for d in range(1,number_of_days+1)]
         
-        queryset = teammodel.Team.objects.all().order_by('last_name')#.filter(last_name=u'Токарь')        
+        queryset = teammodel.Team.objects.all().order_by('last_name')      
         update_url = reverse('journal')
         
         team = []
@@ -51,9 +51,9 @@ class JournalView(TemplateView):
             days = []
             for day in range (1,number_of_days+1):
                 days.append({
-                    'day': day,
-                    #'present': journal and getattr(journal,'day%d' % day, False) or False,                    
-                    'present': journal and getattr(journal,'day%d' % day, False),                    
+                    'day': day,                  
+                    'present': journal and getattr(journal,'day%d' % day, False), 
+                    'verbose': day_abbr[weekday(myear,mmonth,day)][:2],
                     'date': date(myear,mmonth,day).strftime('%Y-%m-%d'),
                 })
             team.append({

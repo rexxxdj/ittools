@@ -22,3 +22,7 @@ textarea, select, input {
 col-sm-10 {
     float: right;
 }
+
+.celebrated {
+    background-color: #f54040;
+}
