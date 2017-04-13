@@ -17,10 +17,18 @@
     <div class="row" id="sub-header">
         <div class="col-xs-12">
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="">8-00</a></li>
-                <li role="presentation"><a href="">11-00</a></li>
-                <li role="presentation"><a href="">Субботы</a></li>
-                <li role="presentation"><a href="">Праздничные дежурства</a></li>
+                <li role="presentation" {% if jid == "8" %}class="active"{% endif %}>
+                    <a href="/services/journal/?id=8">8-00</a>
+                </li>
+                <li role="presentation" {% if jid == "11" %}class="active"{% endif %}>
+                    <a href="/services/journal/?id=11">11-00</a>
+                </li>
+                <li role="presentation" {% if jid == "7" %}class="active"{% endif %}>
+                    <a href="/services/journal/?id=7">Субботы</a>
+                </li>
+                <li role="presentation" {% if jid == "1" %}class="active"{% endif %}>
+                    <a href="/services/journal/?id=1">Праздничные дежурства</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -74,6 +82,7 @@
                            {% if day.verbose == 'Sa' or day.verbose == 'Su' %}readonly='readonly' {% endif %}
                            data-unit-id="{{ unit.id }}"
                            data-date="{{ day.date }}"
+                           data-jid="{{ day.jid }}"
                            data-url="{{ unit.update_url }}"
                            value="1"
                            {% if day.present %}

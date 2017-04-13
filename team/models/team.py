@@ -41,6 +41,11 @@ class Team(models.Model):
         blank=True,
         null=True)
     
+    is_duty = models.BooleanField(
+        blank=True,
+        verbose_name=u'Дежурит',
+        default=False)
+    
     notes = models.TextField(
         blank=True,
         verbose_name=u'Дополнительная информация')

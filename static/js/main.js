@@ -8,6 +8,7 @@ function initJournal() {
             'data': {
                 'pk': box.data('unit-id'),
                 'date': box.data('date'),
+                'jid': box.data('jid'),
                 'present': box.is(':checked') ? '1': '',
                 'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
             },
