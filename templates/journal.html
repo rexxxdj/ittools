@@ -12,7 +12,11 @@
 <br>
 <div class="container">
     <div class="intro">
-        <h2 class="text-center">График Дежурств IT STV (8:00) </h2>
+        <h2 class="text-center">График Дежурств IT STV (
+            {% if jid == "8" %}8:00{% endif%}
+            {% if jid == "11" %}11:00{% endif%}
+            {% if jid == "7" %}Субботы{% endif%}
+            {% if jid == "1" %}Праздники{% endif%}) </h2>
     </div>
     <div class="row" id="sub-header">
         <div class="col-xs-12">
