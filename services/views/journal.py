@@ -12,6 +12,7 @@ from ..models.month11journal import Month11Journal
 from ..models.month1journal import Month1Journal
 from ..models.month7journal import Month7Journal
 from team.models import team as teammodel
+from ..models.services import Services
 from ..util import paginate
 
 class JournalView(TemplateView):
@@ -78,13 +79,21 @@ class JournalView(TemplateView):
                 'id': worker.id,
                 'update_url': update_url,                
             })            
-        context = paginate(team, 10, self.request, context,var_name='team') 
+        context = paginate(team, 10, self.request, context,var_name='team')
+        
+        services = []
+        query = Services.objects.all()
+        for service in query:
+            services.append({
+                'project_name': service.project_name,
+                'link': service.link
+            })
+        context['services'] = services
         return context
     
     def post(self, request, *args, **kwargs):
         data = request.POST 
         jid=data['jid']
-        print(jid)
         current_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
         month = date(current_date.year, current_date.month,1)
         present = data['present'] and True or False        
@@ -92,10 +101,10 @@ class JournalView(TemplateView):
         
         if jid=='11':
             journal = Month11Journal.objects.get_or_create(worker=worker,date=month)[0]
-        elif journal=='1':                   
-            jid= Month1Journal.objects.get_or_create(worker=worker,date=month)[0]
-        elif jurnal =='7':
-            jid = Month7Journal.objects.get_or_create(worker=worker,date=month)[0]
+        elif jid=='1':                   
+            journal= Month1Journal.objects.get_or_create(worker=worker,date=month)[0]
+        elif jid =='7':
+            journal = Month7Journal.objects.get_or_create(worker=worker,date=month)[0]
         else:
             journal = Month8Journal.objects.get_or_create(worker=worker,date=month)[0]
         
