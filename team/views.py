@@ -2,11 +2,14 @@
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from services.models.services import Services
 from models import Team
 
+
 def team_list(request):
-    team = Team.objects.all()   
-    return render(request,'team.html',{'team': team})
+    team = Team.objects.all()  
+    services = Services.objects.all() 
+    return render(request,'team.html',{'team': team,'services': services})
 
 def team_unit(request,uid):
     team = (

@@ -16,12 +16,14 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic.base import TemplateView
+import views
 from team import urls as team_urls
 from services import urls as service_urls
 
 urlpatterns = (
     #index urls
-    url(r'^$', TemplateView.as_view(template_name='index.html')),
+    #url(r'^$', TemplateView.as_view(template_name='index.html')),
+    url(r'^$',views.index_list,name='index'),
     #services urls
     url(r'^services/', include(service_urls)),
     #team urls

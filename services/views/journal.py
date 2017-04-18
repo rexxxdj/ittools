@@ -9,6 +9,8 @@ from django.core.urlresolvers import reverse
 from django.views.generic.base import TemplateView
 from ..models.month8journal import Month8Journal
 from ..models.month11journal import Month11Journal
+from ..models.month1journal import Month1Journal
+from ..models.month7journal import Month7Journal
 from team.models import team as teammodel
 from ..util import paginate
 
@@ -52,9 +54,9 @@ class JournalView(TemplateView):
         for worker in queryset: 
             try:
                 if jid=='1':
-                    journal = None#Month8Journal.objects.get(worker=worker,date=month)
+                    journal = Month1Journal.objects.get(worker=worker,date=month)
                 elif jid=='7':
-                    journal = None#Month8Journal.objects.get(worker=worker,date=month)
+                    journal = Month7Journal.objects.get(worker=worker,date=month)
                 elif jid=='8':
                     journal = Month8Journal.objects.get(worker=worker,date=month)
                 elif jid=='11':
@@ -80,8 +82,7 @@ class JournalView(TemplateView):
         return context
     
     def post(self, request, *args, **kwargs):
-        data = request.POST  
-        #iid=data['iid']
+        data = request.POST 
         jid=data['jid']
         print(jid)
         current_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
@@ -92,7 +93,9 @@ class JournalView(TemplateView):
         if jid=='11':
             journal = Month11Journal.objects.get_or_create(worker=worker,date=month)[0]
         elif journal=='1':                   
-            jid= Month11Journal.objects.get_or_create(worker=worker,date=month)[0]
+            jid= Month1Journal.objects.get_or_create(worker=worker,date=month)[0]
+        elif jurnal =='7':
+            jid = Month7Journal.objects.get_or_create(worker=worker,date=month)[0]
         else:
             journal = Month8Journal.objects.get_or_create(worker=worker,date=month)[0]
         
