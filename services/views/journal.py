@@ -48,7 +48,10 @@ class JournalView(TemplateView):
             'verbose': day_abbr[weekday(myear,mmonth,d)][:2]}
             for d in range(1,number_of_days+1)]
         
-        queryset = teammodel.Team.objects.all().filter(is_duty=True).order_by('last_name')     
+        if jid == '8' or jid == '11':
+            queryset = teammodel.Team.objects.all().filter(is_duty=True).order_by('last_name') 
+        else:
+            queryset = teammodel.Team.objects.all().order_by('-is_duty', 'last_name') 
         update_url = reverse('journal')
         
         team = []
