@@ -57,7 +57,9 @@
                 <th class="num">#</th>
                 <th>Сотрудник</th>
                 {% for day in month_header %}
-                <th class="day-header {% if day.verbose == 'Sa' or day.verbose == 'Su' %}celebrated{% endif %} "> 
+                <th class="day-header 
+                           {% if day.verbose == 'Sa' or day.verbose == 'Su' %}celebrated{% endif %} 
+                           {% if day.verbose == 'Mo' %}newday{% endif %} "> 
                     {{ day.verbose}}
                     <br/>
                     {{ day.day }}
@@ -80,18 +82,35 @@
                     {{ unit.full_name }}
                 </td>
                 {% for day in unit.days %}
-                <td class="day-box {% if day.verbose == 'Sa' or day.verbose == 'Su' %}celebrated {% endif %}">
-                    {% if day.verbose != 'Sa' and day.verbose != 'Su' %}
-                    <input type="checkbox" 
-                           {% if day.verbose == 'Sa' or day.verbose == 'Su' %}readonly='readonly' {% endif %}
-                           data-unit-id="{{ unit.id }}"
-                           data-date="{{ day.date }}"
-                           data-jid="{{ day.jid }}"
-                           data-url="{{ unit.update_url }}"
-                           value="1"
-                           {% if day.present %}
-                            checked="checked" 
-                           {% endif %} />    
+                
+                <td class="day-box 
+                           {% if jid == "8" or jid == "11" %}
+                            {% if day.verbose == 'Sa' or day.verbose == 'Su' %}celebrated{% endif %}                            
+                           {% endif %}
+                           {% if day.verbose == 'Mo' %}newday{% endif %}">                     
+                
+                    {% if jid == "8" or jid == "11" %}
+                        {% if day.verbose != 'Sa' and day.verbose != 'Su' %}
+                        <input type="checkbox" 
+                               data-unit-id="{{ unit.id }}"
+                               data-date="{{ day.date }}"
+                               data-jid="{{ day.jid }}"
+                               data-url="{{ unit.update_url }}"
+                               value="1"
+                               {% if day.present %}
+                                checked="checked" 
+                               {% endif %} />    
+                        {% endif %}
+                    {% else %}
+                        <input type="checkbox" 
+                               data-unit-id="{{ unit.id }}"
+                               data-date="{{ day.date }}"
+                               data-jid="{{ day.jid }}"
+                               data-url="{{ unit.update_url }}"
+                               value="1"
+                               {% if day.present %}
+                                checked="checked" 
+                               {% endif %} />
                     {% endif %}
                 </td>
                 {% endfor %}

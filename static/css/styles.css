@@ -26,3 +26,11 @@ col-sm-10 {
 .celebrated {
     background-color: #787879;
 }
+
+table {
+    border: 2px solid gray;
+}
+
+.newday {
+    border-left: 2px solid black;
+}
