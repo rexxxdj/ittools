@@ -51,7 +51,7 @@
         <strong>{{ month_verbose }} {{ year }}</strong>
         <a href="?month={{ next_month }}" title="Следующий месяц">&rarr;</a>
     </p>
-    <table class="table table-hover table-stripped" id="team-journal">
+    <table class="table table-hover table-striped" id="team-journal">
         <thead>
             <tr class="header">
                 <th class="num">#</th>
@@ -59,7 +59,7 @@
                 {% for day in month_header %}
                 <th class="day-header 
                            {% if day.verbose == 'Sa' or day.verbose == 'Su' %}celebrated{% endif %} 
-                           {% if day.verbose == 'Mo' %}newday{% endif %} "> 
+                           {% if day.verbose == 'Mo' or day.day == 1 %}newday{% endif %} "> 
                     {{ day.verbose}}
                     <br/>
                     {{ day.day }}
@@ -87,7 +87,7 @@
                            {% if jid == "8" or jid == "11" %}
                             {% if day.verbose == 'Sa' or day.verbose == 'Su' %}celebrated{% endif %}                            
                            {% endif %}
-                           {% if day.verbose == 'Mo' %}newday{% endif %}">                     
+                           {% if day.verbose == 'Mo' or day.day == 1 %}newday{% endif %}">                     
                 
                     {% if jid == "8" or jid == "11" %}
                         {% if day.verbose != 'Sa' and day.verbose != 'Su' %}
