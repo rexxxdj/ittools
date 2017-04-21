@@ -128,12 +128,19 @@ class JournalView(TemplateView):
                 pass
             elif jid == '8':
                 #Проверка дежурного в другом журнале
-                jour = Month11Journal.objects.get(worker=worker,date=month)
+                try:
+                    jour = Month11Journal.objects.get(worker=worker,date=month)
+                except Month11Journal.DoesNotExist:
+                    jour = None
+                    
                 present= jour and getattr(jour,'day%s' % day, False)
                 if present:
                     error = u"Этот сотрудник дежурит на 11-00 !!! \nСделайте изменения в том журнале или назначте другого сотрудника."
-                #Проверка дежурных в этом же журнале    
-                jour = Month8Journal.objects.all().filter(date=month)
+                #Проверка дежурных в этом же журнале  
+                try:
+                    jour = Month8Journal.objects.all().filter(date=month)
+                except Month8Journal.DoesNotExist:
+                    jour = None
                 for unit in jour:
                     present = unit and getattr(unit, 'day%s' % day, False)
                     if present:
@@ -143,13 +150,21 @@ class JournalView(TemplateView):
                             error = error + u'\nТакже вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s !' % unit.worker    
             elif jid == '11':
                 #Проверка дежурного в другом журнале
-                jour = Month8Journal.objects.get(worker=worker,date=month)
+                try:
+                    jour = Month8Journal.objects.get(worker=worker,date=month)
+                except Month8Journal.DoesNotExist:
+                    jour = None
+                
                 present= jour and getattr(jour,'day%s' % day, False)
                 if present:
                     error = u"Этот сотрудник дежурит на 8-00 !!! \nСделайте изменения в том журнале или назначте другого сотрудника."                
                 
                 #Проверка дежурных в этом же журнале
-                jour = Month11Journal.objects.all().filter(date=month)
+                try:
+                    jour = Month11Journal.objects.all().filter(date=month)
+                except Month11Journal.DoesNotExist:
+                    jour = None
+                    
                 for unit in jour:
                     present = unit and getattr(unit, 'day%s' % day, False)
                     if present:
