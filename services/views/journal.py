@@ -94,13 +94,20 @@ class JournalView(TemplateView):
         context['services'] = services
         return context
     
+    
+    
     def post(self, request, *args, **kwargs):
+        
+        def WorkerStatus(worker,jid,current_date,month):
+            pass
+        
         data = request.POST 
         jid=data['jid']
         current_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
         month = date(current_date.year, current_date.month,1)
         present = data['present'] and True or False        
-        worker = teammodel.Team.objects.get(pk=data['pk'])
+        worker = teammodel.Team.objects.get(pk=data['pk'])  
+        day = data['day']
         
         if jid=='11':
             journal = Month11Journal.objects.get_or_create(worker=worker,date=month)[0]
@@ -110,11 +117,63 @@ class JournalView(TemplateView):
             journal = Month7Journal.objects.get_or_create(worker=worker,date=month)[0]
         else:
             journal = Month8Journal.objects.get_or_create(worker=worker,date=month)[0]
+                        
+        setattr(journal, 'day%d' % current_date.day, present) 
         
-        setattr(journal, 'day%d' % current_date.day, present)
-        journal.save()
+        def valid_journal(jid,worker,month,day):
+            error = ''
+            if jid == '1':
+                pass
+            elif jid == '7':
+                pass
+            elif jid == '8':
+                #Проверка дежурного в другом журнале
+                jour = Month11Journal.objects.get(worker=worker,date=month)
+                present= jour and getattr(jour,'day%s' % day, False)
+                if present:
+                    error = u"Этот сотрудник дежурит на 11-00 !!! \nСделайте изменения в том журнале или назначте другого сотрудника."
+                #Проверка дежурных в этом же журнале    
+                jour = Month8Journal.objects.all().filter(date=month)
+                for unit in jour:
+                    present = unit and getattr(unit, 'day%s' % day, False)
+                    if present:
+                        if error == '':
+                            error = u'Вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s!' % unit.worker
+                        else:
+                            error = error + u'\nТакже вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s !' % unit.worker    
+            elif jid == '11':
+                #Проверка дежурного в другом журнале
+                jour = Month8Journal.objects.get(worker=worker,date=month)
+                present= jour and getattr(jour,'day%s' % day, False)
+                if present:
+                    error = u"Этот сотрудник дежурит на 8-00 !!! \nСделайте изменения в том журнале или назначте другого сотрудника."                
+                
+                #Проверка дежурных в этом же журнале
+                jour = Month11Journal.objects.all().filter(date=month)
+                for unit in jour:
+                    present = unit and getattr(unit, 'day%s' % day, False)
+                    if present:
+                        if error == '':
+                            error = u'Вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s!' % unit.worker
+                        else:
+                            error = error + u'\nТакже вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s !' % unit.worker
+            else:
+                pass
+            
+            return error
         
-        return JsonResponse({'status': 'success'})
+        error = ''
+        if present:
+            error = valid_journal(jid,worker,month,day)
+        
+        if not error:
+            journal.save()
+            
+        return JsonResponse({'text':error}) 
+            
+        
+        
+        
     
     
     
