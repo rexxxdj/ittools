@@ -10,7 +10,7 @@
             </div>
             <div class="row people">
                 {% for person in team %}
-                    <a href="/team/{{ person.id}}/">
+                    <a href="#">
                     <div class="col-lg-4 col-md-4 col-sm-6 item">
                         <div class="box">    
                             {% if person.photo %}
@@ -20,12 +20,18 @@
                             {% endif %}
                             <h3 class="name">{{ person.first_name }} {{ person.last_name }}</h3>
                             <p class="title">{{ person.position }}</p>
-                            <p class="description">{{ person.description }} </p>                        
-                            <div class="social">
+                            <p class="title">{{ person.location }}</p>
+                            {% if person.email %}
+                                <p class="tittle"><i class="ion-email"></i>  {{ person.email }}</p>
+                            {% endif %}
+                            {% if person.phone %}
+                                <p class="tittle"><i class="ion-android-phone-portrait"> </i> {{ person.phone }}</p>
+                            {% endif %}
+                            <!--<div class="social">
                                 <a href="#"><i class="fa fa-facebook-official"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
                                 <a href="#"><i class="fa fa-instagram"></i></a>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                     </a>

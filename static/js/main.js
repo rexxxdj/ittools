@@ -13,7 +13,7 @@ function initJournal() {
                 'present': box.is(':checked') ? '1': '',
                 'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
             },            
-            'error': function(xhr, status, error){
+            'error': function(xhr, status, error){                    
                 alert(error);
             },
             'success': function(data, status, xhr){
