@@ -38,3 +38,7 @@ table {
 .table-hover > tbody > tr:hover {
     background-color: #cfcacacc;
 }
+
+.tittle {
+    min-height: 20px;
+}

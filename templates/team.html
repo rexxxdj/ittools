@@ -21,24 +21,28 @@
                             <h3 class="name">{{ person.first_name }} {{ person.last_name }}</h3>
                             <p class="title">{{ person.position }}</p>
                             <p class="title">{{ person.location }}</p>
-                            {% if person.email %}
-                                <p class="tittle">
+                            <p class="tittle">
+                                {% if person.email %}
                                     <i class="ion-email"></i>
                                     {{ person.email }}
-                                </p>
-                            {% endif %}
-                            {% if person.phone %}
-                                <p class="tittle">
+                                {% else %}
+                                {% endif %}                                
+                            </p>
+                            <p class="tittle">
+                                {% if person.phone %}
                                     <i class="ion-android-phone-portrait"></i> 
                                     {{ person.phone }}
-                                </p>
-                            {% endif %}
-                            {% if person.office_phone %}
-                                <p class="tittle">
+                                {% else %}
+                                {% endif %}                                
+                            </p>                            
+                            <p class="tittle">
+                                {% if person.office_phone %}
                                     <i class="ion-android-call"></i>
                                     {{ person.office_phone }}
-                                </p>
-                            {% endif %}
+                                {% else %}                                    
+                                {% endif %}
+                                
+                            </p>                            
                             <!--<div class="social">
                                 <a href="#"><i class="fa fa-facebook-official"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
