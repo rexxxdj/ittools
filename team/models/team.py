@@ -56,10 +56,16 @@ class Team(models.Model):
         verbose_name = u'Город')
     
     phone = models.CharField(
-        max_length=255,
+        max_length=20,
         blank=True,
         null=True,
         verbose_name=u'Телефоны')
+    
+    office_phone = models.CharField(
+        max_length=4,
+        blank=True,
+        null=True,
+        verbose_name=u'Офисный телефон')
     
     email = models.EmailField(
         max_length=255,

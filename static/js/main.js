@@ -12,7 +12,7 @@ function initJournal() {
                 'day': box.data('day'),
                 'present': box.is(':checked') ? '1': '',
                 'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
-            },            
+            },
             'error': function(xhr, status, error){                    
                 alert(error);
             },

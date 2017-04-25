@@ -7,10 +7,11 @@ from django.http import HttpResponse
 
 from django.core.urlresolvers import reverse
 from django.views.generic.base import TemplateView
-from ..models.month8journal import Month8Journal
-from ..models.month11journal import Month11Journal
-from ..models.month1journal import Month1Journal
-from ..models.month7journal import Month7Journal
+from ..models.month1journal import Month1Journal    #Праздничные дежурства
+from ..models.month2journal import Month2Journal    #Отпуск
+from ..models.month7journal import Month7Journal    #Субботы
+from ..models.month8journal import Month8Journal    #Дежурства 8-00
+from ..models.month11journal import Month11Journal  #Дежурства 11-00
 from team.models import team as teammodel
 from ..models.services import Services
 from ..util import paginate
@@ -59,6 +60,8 @@ class JournalView(TemplateView):
             try:
                 if jid=='1':
                     journal = Month1Journal.objects.get(worker=worker,date=month)
+                elif jid=='2':
+                    journal = Month2journal.objects.get(worker=worker,date=month)
                 elif jid=='7':
                     journal = Month7Journal.objects.get(worker=worker,date=month)
                 elif jid=='8':
@@ -67,13 +70,14 @@ class JournalView(TemplateView):
                     journal = Month11Journal.objects.get(worker=worker,date=month)
             except Exception:
                 journal=None 
+                
             days = []
             for day in range (1,number_of_days+1):
                 days.append({
                     'day': day,                  
                     'present': journal and getattr(journal,'day%d' % day, False), 
                     'verbose': day_abbr[weekday(myear,mmonth,day)][:2],
-                    'date': date(myear,mmonth,day).strftime('%Y-%m-%d'),                    
+                    'date': date(myear,mmonth,day).strftime('%Y-%m-%d'),                   
                     'jid':jid,
                 })
             team.append({
@@ -106,13 +110,15 @@ class JournalView(TemplateView):
         current_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
         month = date(current_date.year, current_date.month,1)
         present = data['present'] and True or False        
-        worker = teammodel.Team.objects.get(pk=data['pk'])  
+        worker = teammodel.Team.objects.get(pk=data['pk'])          
         day = data['day']
         
         if jid=='11':
             journal = Month11Journal.objects.get_or_create(worker=worker,date=month)[0]
         elif jid=='1':                   
-            journal= Month1Journal.objects.get_or_create(worker=worker,date=month)[0]
+            journal = Month1Journal.objects.get_or_create(worker=worker,date=month)[0]
+        elif jid=='2':
+            journal = Month2Journal.objects.get_or_create(worker=worker,date=month)[0]
         elif jid =='7':
             journal = Month7Journal.objects.get_or_create(worker=worker,date=month)[0]
         else:
@@ -172,6 +178,45 @@ class JournalView(TemplateView):
                             error = u'Вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s!' % unit.worker
                         else:
                             error = error + u'\nТакже вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s !' % unit.worker
+            elif jid == '2':
+                #Проверка сотрудника на дежурства
+                #8-00
+                try:
+                    jour = Month8Journal.objects.get(worker=worker,date=month)
+                except Month8Journal.DoesNotExist:
+                    jour = None
+                
+                present= jour and getattr(jour,'day%s' % day, False)
+                if present:
+                    error = u"Этот сотрудник дежурит на 8-00 !!!"
+                #11-00    
+                try:
+                    jour = Month11Journal.objects.get(worker=worker,date=month)
+                except Month11Journal.DoesNotExist:
+                    jour = None
+                
+                present= jour and getattr(jour,'day%s' % day, False)
+                if present:
+                    error = u"Этот сотрудник дежурит на 11-00 !!!"
+                #Праздники
+                try:
+                    jour = Month1Journal.objects.get(worker=worker,date=month)
+                except Month1Journal.DoesNotExist:
+                    jour = None
+                
+                present= jour and getattr(jour,'day%s' % day, False)
+                if present:
+                    error = u"Этот сотрудник дежурит в этот день !!!"
+                
+                #Субботы
+                try:
+                    jour = Month7Journal.objects.get(worker=worker,date=month)
+                except Month7Journal.DoesNotExist:
+                    jour = None
+                
+                present= jour and getattr(jour,'day%s' % day, False)
+                if present:
+                    error = u"Этот сотрудник дежурит в эту субботу !!!"
             else:
                 pass
             

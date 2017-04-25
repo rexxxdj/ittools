@@ -22,10 +22,22 @@
                             <p class="title">{{ person.position }}</p>
                             <p class="title">{{ person.location }}</p>
                             {% if person.email %}
-                                <p class="tittle"><i class="ion-email"></i>  {{ person.email }}</p>
+                                <p class="tittle">
+                                    <i class="ion-email"></i>
+                                    {{ person.email }}
+                                </p>
                             {% endif %}
                             {% if person.phone %}
-                                <p class="tittle"><i class="ion-android-phone-portrait"> </i> {{ person.phone }}</p>
+                                <p class="tittle">
+                                    <i class="ion-android-phone-portrait"></i> 
+                                    {{ person.phone }}
+                                </p>
+                            {% endif %}
+                            {% if person.office_phone %}
+                                <p class="tittle">
+                                    <i class="ion-android-call"></i>
+                                    {{ person.office_phone }}
+                                </p>
                             {% endif %}
                             <!--<div class="social">
                                 <a href="#"><i class="fa fa-facebook-official"></i></a>
