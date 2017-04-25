@@ -47,7 +47,12 @@
     </div>
     {% else %}
     <div class="alert">
-        Изменения в журнал сохраняются автоматически при каждом клике на ячейках.
+        {% if user != "rexxxdev" %} 
+            Изменения в журнал сохраняются автоматически при каждом клике на ячейках. 
+        {% else %}
+            Вы можете только просмотреть графики. Все изменения не сохранятся в базе.
+        {% endif %}
+        
     </div>
 
     <p id="jornal-nav" class="text-center">
@@ -89,9 +94,9 @@
                 
                 <td class="day-box 
                            {% if jid == "8" or jid == "11" %}
-                            {% if day.verbose == 'Sa' or day.verbose == 'Su' %}celebrated{% endif %}                            
+                                {% if day.verbose == 'Sa' or day.verbose == 'Su' %} celebrated {% endif %}                            
                            {% endif %}
-                           {% if day.verbose == 'Mo' or day.day == 1 %}newday{% endif %}">                     
+                           {% if day.verbose == 'Mo' or day.day == 1 %} newday {% endif %}">                     
                 
                     {% if jid == "8" or jid == "11" %}
                         {% if day.verbose != 'Sa' and day.verbose != 'Su' %}
@@ -101,6 +106,7 @@
                                data-jid="{{ day.jid }}"
                                data-url="{{ unit.update_url }}"
                                data-day="{{ day.day }}"
+                               {% if user != "rexxxdev" %} readonly {% endif %}
                                value="1"
                                {% if day.present %}
                                 checked="checked" 
@@ -114,6 +120,7 @@
                                data-url="{{ unit.update_url }}"
                                data-day="{{ day.day }}"
                                value="1"
+                               {% if user != "rexxxdev" %} readonly {% endif %}
                                {% if day.present %}
                                 checked="checked" 
                                {% endif %} />

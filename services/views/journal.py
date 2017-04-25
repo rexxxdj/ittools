@@ -20,6 +20,7 @@ class JournalView(TemplateView):
     template_name = 'journal.html'
     
     def get_context_data(self, **kwargs): 
+        user = self.request.META['USER']
         
         jid = self.request.GET.get('id')        
         if jid:
@@ -35,6 +36,7 @@ class JournalView(TemplateView):
         next_month=date(month.year, month.month+1,1)
         prev_month=date(month.year, month.month-1,1)  
         
+        context['user'] = user
         context['jid'] = jid
         context['prev_month'] = prev_month.strftime('%Y-%m-%d')
         context['next_month'] = next_month.strftime('%Y-%m-%d')
@@ -111,7 +113,8 @@ class JournalView(TemplateView):
         month = date(current_date.year, current_date.month,1)
         present = data['present'] and True or False        
         worker = teammodel.Team.objects.get(pk=data['pk'])          
-        day = data['day']
+        day = data['day']       
+        
         
         if jid=='11':
             journal = Month11Journal.objects.get_or_create(worker=worker,date=month)[0]
