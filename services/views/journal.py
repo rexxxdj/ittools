@@ -22,7 +22,7 @@ class JournalView(TemplateView):
     def get_context_data(self, **kwargs): 
         user = self.request.META['USER']
         
-        jid = self.request.GET.get('id')        
+        jid = self.request.GET.get('id')  
         if jid:
             jid=jid
         else:
@@ -33,8 +33,16 @@ class JournalView(TemplateView):
         else:
             today = datetime.today()
             month = date(today.year, today.month,1)
-        next_month=date(month.year, month.month+1,1)
-        prev_month=date(month.year, month.month-1,1)  
+            
+        if month.month==12:
+            next_month=date(month.year+1,1,1)
+        else:
+            next_month=date(month.year, month.month+1,1)
+        
+        if month.month==1:
+            prev_month=date(month.year-1, 12,1)  
+        else:
+            prev_month=date(month.year, month.month-1,1)  
         
         context['user'] = user
         context['jid'] = jid
@@ -56,14 +64,15 @@ class JournalView(TemplateView):
         else:
             queryset = teammodel.Team.objects.all().order_by('-is_duty', 'last_name') 
         update_url = reverse('journal')
-        
+                
         team = []
         for worker in queryset: 
+            
             try:
                 if jid=='1':
                     journal = Month1Journal.objects.get(worker=worker,date=month)
-                elif jid=='2':
-                    journal = Month2journal.objects.get(worker=worker,date=month)
+                elif jid=='2':                    
+                    journal = Month2Journal.objects.get(worker=worker,date=month)
                 elif jid=='7':
                     journal = Month7Journal.objects.get(worker=worker,date=month)
                 elif jid=='8':
@@ -71,7 +80,7 @@ class JournalView(TemplateView):
                 elif jid=='11':
                     journal = Month11Journal.objects.get(worker=worker,date=month)
             except Exception:
-                journal=None 
+                journal=None   
                 
             days = []
             for day in range (1,number_of_days+1):
@@ -104,9 +113,6 @@ class JournalView(TemplateView):
     
     def post(self, request, *args, **kwargs):
         
-        def WorkerStatus(worker,jid,current_date,month):
-            pass
-        
         data = request.POST 
         jid=data['jid']
         current_date = datetime.strptime(data['date'], '%Y-%m-%d').date()
@@ -126,8 +132,8 @@ class JournalView(TemplateView):
             journal = Month7Journal.objects.get_or_create(worker=worker,date=month)[0]
         else:
             journal = Month8Journal.objects.get_or_create(worker=worker,date=month)[0]
-                        
-        setattr(journal, 'day%d' % current_date.day, present) 
+                
+        
         
         def valid_journal(jid,worker,month,day):
             error = ''
@@ -156,7 +162,20 @@ class JournalView(TemplateView):
                         if error == '':
                             error = u'Вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s!' % unit.worker
                         else:
-                            error = error + u'\nТакже вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s !' % unit.worker    
+                            error = error + u'\nТакже вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s !' % unit.worker 
+                #Проверка дежурного в отпуске
+                try:
+                    jour = Month2Journal.objects.get(worker=worker,date=month)
+                except Month2Journal.DoesNotExist:
+                    jour = None
+                    
+                present= jour and getattr(jour,'day%s' % day, False)
+                if present:
+                    if error == '':
+                        error = u'Этот сотрудник в отпуске'
+                    else:
+                        error = error + u'\nТакже этот сотрудник в отпуске'
+                
             elif jid == '11':
                 #Проверка дежурного в другом журнале
                 try:
@@ -181,6 +200,18 @@ class JournalView(TemplateView):
                             error = u'Вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s!' % unit.worker
                         else:
                             error = error + u'\nТакже вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s !' % unit.worker
+                #Проверка дежурного в отпуске
+                try:
+                    jour = Month2Journal.objects.get(worker=worker,date=month)
+                except Month2Journal.DoesNotExist:
+                    jour = None
+                    
+                present= jour and getattr(jour,'day%s' % day, False)
+                if present:
+                    if error == '':
+                        error = u'Этот сотрудник в отпуске'
+                    else:
+                        error = error + u'\nТакже этот сотрудник в отпуске'
             elif jid == '2':
                 #Проверка сотрудника на дежурства
                 #8-00
@@ -188,7 +219,7 @@ class JournalView(TemplateView):
                     jour = Month8Journal.objects.get(worker=worker,date=month)
                 except Month8Journal.DoesNotExist:
                     jour = None
-                
+                    
                 present= jour and getattr(jour,'day%s' % day, False)
                 if present:
                     error = u"Этот сотрудник дежурит на 8-00 !!!"
@@ -227,9 +258,10 @@ class JournalView(TemplateView):
         
         error = ''
         if present:
-            error = valid_journal(jid,worker,month,day)
+            error = valid_journal(jid,worker,month,day)        
         
         if not error:
+            setattr(journal, 'day%d' % current_date.day, present) 
             journal.save()
             
         return JsonResponse({'text':error}) 
