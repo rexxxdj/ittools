@@ -1,5 +1,5 @@
 .team-boxed {
-  margin-top:25px;
+  margin-top:50px;
 }
 
 .projects-clean {
@@ -47,4 +47,8 @@ table {
     margin-top: 15px;    
     font-weight: bold;
     font-size: 14px;
+}
+
+.alert {
+    margin-top: 35px;
 }

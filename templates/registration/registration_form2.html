@@ -20,6 +20,14 @@
             <i class="icon ion-ios-locked-outline"></i>
         </div>
         <div class="form-group">
+            <input class="form-control" id="username" type="text" name="username" placeholder="Your Name">
+            <span class="help-block">{{ form.errors.username.as_text }}</span>
+        </div>
+        <div class="form-group">
+            <input class="form-control" id="usersurname" type="text" name="usersurname" placeholder="Your SurName">
+            <span class="help-block">{{ form.errors.usersurname.as_text }}</span>
+        </div>
+        <div class="form-group">
             <input class="form-control" id="email" type="text" name="email" placeholder="Your Email">
             <span class="help-block">{{ form.errors.email.as_text }}</span>
         </div>

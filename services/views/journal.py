@@ -20,10 +20,11 @@ from ..util import paginate
 
 class JournalView(TemplateView):
     template_name = 'journal.html'
-        
+     
+       
     def get_context_data(self, **kwargs):         
         context = super(JournalView, self).get_context_data(**kwargs)
-                
+        
         jid = self.request.GET.get('id')  
         if jid:
             jid=jid
