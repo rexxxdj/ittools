@@ -47,7 +47,7 @@
     </div>
     {% else %}
     <div class="alert">
-        {% if user != "rexxxdev" %} 
+        {% if user.is_authenticated %} 
             Изменения в журнал сохраняются автоматически при каждом клике на ячейках. 
         {% else %}
             Вы можете только просмотреть графики. Все изменения не сохранятся в базе.
@@ -97,7 +97,7 @@
                                 {% if day.verbose == 'Sa' or day.verbose == 'Su' %} celebrated {% endif %}                            
                            {% endif %}
                            {% if day.verbose == 'Mo' or day.day == 1 %} newday {% endif %}">                     
-                
+                    
                     {% if jid == "8" or jid == "11" %}
                         {% if day.verbose != 'Sa' and day.verbose != 'Su' %}
                         <input type="checkbox" 
@@ -106,8 +106,8 @@
                                data-jid="{{ day.jid }}"
                                data-url="{{ unit.update_url }}"
                                data-day="{{ day.day }}"
-                               {% if user != "rexxxdev" %} readonly {% endif %}
                                value="1"
+                               {% if not user.is_authenticated %} readonly {% endif %}
                                {% if day.present %}
                                 checked="checked" 
                                {% endif %} />    
@@ -120,11 +120,11 @@
                                data-url="{{ unit.update_url }}"
                                data-day="{{ day.day }}"
                                value="1"
-                               {% if user != "rexxxdev" %} readonly {% endif %}
+                               {% if not user.is_authenticated %} readonly {% endif %}
                                {% if day.present %}
                                 checked="checked" 
                                {% endif %} />
-                    {% endif %}
+                    {% endif %}                    
                 </td>
                 {% endfor %}
             </tr>

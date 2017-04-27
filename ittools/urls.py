@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.views.generic.base import TemplateView
+from django.contrib.auth import views as auth_views
+from django.views.generic.base import TemplateView, RedirectView
 from services.views import services
 import views
 from team import urls as team_urls
@@ -23,13 +24,15 @@ from services import urls as service_urls
 
 urlpatterns = (
     #index urls
-    #url(r'^$', TemplateView.as_view(template_name='index.html')),
     url(r'^$',views.index_list,name='index'),
-    #url(r'^$',services.service_list,name='index'),
     #services urls
     url(r'^services/', include(service_urls)),
     #team urls
     url(r'^team/', include(team_urls)),
     # app urls           
     url(r'^admin/', include(admin.site.urls)),
+    # registration/autorisation urls
+    url(r'^users/logout/$', auth_views.logout, kwargs={'next_page':'index'}, name='auth_logout'),
+    url(r'^register/complete/$', RedirectView.as_view(pattern_name='index'), name='registration_complete'),
+    url(r'^users/', include('registration.backends.simple.urls', namespace='users')),
 )

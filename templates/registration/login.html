@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block meta_title %}Login Page_STV IT Tools {% endblock meta_title %}
+{% block activemain %}active{% endblock activemain %}
+{% block content %}
+<div class="login-dark">
+    <form action="{% url "users:auth_login" %}" method="post">
+        {% csrf_token %}        
+        
+        <h2 class="text-center show">Login Form</h2>
+        <div class="illustration">
+            <i class="icon ion-ios-locked-outline"></i>
+        </div>
+        <div class="form-group">
+            <input class="form-control"
+                   id="login"
+                   type="login" 
+                   name="login" 
+                   placeholder="Login">
+        </div>
+        <div class="form-group">
+            <input class="form-control" 
+                   id="password" 
+                   type="password" 
+                   name="password" 
+                   placeholder="Password">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" 
+                    type="submit">Log In</button>
+        </div>
+        <a href="#" class="forgot">Forgot your login or password?</a>
+    </form>
+</div>
+{% endblock content %}

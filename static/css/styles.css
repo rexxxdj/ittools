@@ -3,7 +3,7 @@
 }
 
 .projects-clean {
-  margin-top:25px;
+  margin-top:50px;
 }
 
 a, a:hover, a:active, a:focus {
@@ -41,4 +41,10 @@ table {
 
 .tittle {
     min-height: 20px;
+}
+
+#user-toolbar {
+    margin-top: 15px;    
+    font-weight: bold;
+    font-size: 14px;
 }

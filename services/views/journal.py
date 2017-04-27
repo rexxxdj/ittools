@@ -4,9 +4,11 @@ from dateutil.relativedelta import relativedelta
 from calendar import monthrange, weekday, day_abbr
 from django.http import JsonResponse
 from django.http import HttpResponse
-
+#from django.utils.decorators import method_decorator
+#from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.views.generic.base import TemplateView
+
 from ..models.month1journal import Month1Journal    #Праздничные дежурства
 from ..models.month2journal import Month2Journal    #Отпуск
 from ..models.month7journal import Month7Journal    #Субботы
@@ -18,16 +20,16 @@ from ..util import paginate
 
 class JournalView(TemplateView):
     template_name = 'journal.html'
-    
-    def get_context_data(self, **kwargs): 
-        user = self.request.META['USER']
         
+    def get_context_data(self, **kwargs):         
+        context = super(JournalView, self).get_context_data(**kwargs)
+                
         jid = self.request.GET.get('id')  
         if jid:
             jid=jid
         else:
             jid="8"
-        context = super(JournalView, self).get_context_data(**kwargs)
+        
         if self.request.GET.get('month'):
             month=datetime.strptime(self.request.GET['month'], '%Y-%m-%d').date()
         else:
@@ -44,7 +46,6 @@ class JournalView(TemplateView):
         else:
             prev_month=date(month.year, month.month-1,1)  
         
-        context['user'] = user
         context['jid'] = jid
         context['prev_month'] = prev_month.strftime('%Y-%m-%d')
         context['next_month'] = next_month.strftime('%Y-%m-%d')
@@ -110,7 +111,6 @@ class JournalView(TemplateView):
         return context
     
     
-    
     def post(self, request, *args, **kwargs):
         
         data = request.POST 
@@ -131,8 +131,7 @@ class JournalView(TemplateView):
         elif jid =='7':
             journal = Month7Journal.objects.get_or_create(worker=worker,date=month)[0]
         else:
-            journal = Month8Journal.objects.get_or_create(worker=worker,date=month)[0]
-                
+            journal = Month8Journal.objects.get_or_create(worker=worker,date=month)[0]               
         
         
         def valid_journal(jid,worker,month,day):
