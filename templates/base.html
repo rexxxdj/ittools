@@ -26,7 +26,12 @@
                     <a class="navbar-brand navbar-link" href="/"><img src="/static/img/logo1IT.png"> IT Tools</a>
                     <div class="col-xs-10" id="user-toolbar">
                         {% if user.is_authenticated %}
-                            <span> {{ user.first_name }} {{user.lastname }} </span> |
+                            <span> {%if user.first_name%} 
+                                    {{ user.first_name }} {{user.last_name }} 
+                                   {% else %} 
+                                    {{ user.username }}
+                                   {% endif %}
+                            </span> |
                             <a href="{% url "users:auth_logout" %}">Logout </a>
                         {% else %}
                             <a href="{% url "users:auth_login" %}"> Login </a> |

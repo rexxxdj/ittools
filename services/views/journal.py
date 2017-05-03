@@ -121,8 +121,7 @@ class JournalView(TemplateView):
         month = date(current_date.year, current_date.month,1)
         present = data['present'] and True or False        
         worker = teammodel.Team.objects.get(pk=data['pk'])          
-        day = data['day']       
-        
+        day = data['day']               
         
         if jid=='11':
             journal = Month11Journal.objects.get_or_create(worker=worker,date=month)[0]
