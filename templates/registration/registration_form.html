@@ -3,16 +3,10 @@
 {% block meta_title %}Login Page_STV IT Tools {% endblock meta_title %}
 {% block activemain %}active{% endblock activemain %}
 {% block content %}
-<div class="login-dark">
-    {% block status_message %}
-        {% if form.errors %}
-            <div class="alert alert-warning" role="alert">
-                Please, correct to following errors. {{ form.non_field_errors }}
-            </div>
-        {% endif %}            
-    {% endblock status_message %}
+<div class="login-dark">    
     
     <form action="{% url "users:registration_register" %}" method="post">
+        
         {% csrf_token %}        
         
         <h2 class="text-center show">Registration Form</h2>

@@ -16,7 +16,8 @@ from ..models.month8journal import Month8Journal    #Дежурства 8-00
 from ..models.month11journal import Month11Journal  #Дежурства 11-00
 from team.models import team as teammodel
 from ..models.services import Services
-from ..util import paginate
+from ittools.utils.pagination import paginate
+from ittools.utils.validation import valid_journal
 
 class JournalView(TemplateView):
     template_name = 'journal.html'
@@ -132,133 +133,11 @@ class JournalView(TemplateView):
         elif jid =='7':
             journal = Month7Journal.objects.get_or_create(worker=worker,date=month)[0]
         else:
-            journal = Month8Journal.objects.get_or_create(worker=worker,date=month)[0]               
-        
-        
-        def valid_journal(jid,worker,month,day):
-            error = ''
-            if jid == '1':
-                pass
-            elif jid == '7':
-                pass
-            elif jid == '8':
-                #Проверка дежурного в другом журнале
-                try:
-                    jour = Month11Journal.objects.get(worker=worker,date=month)
-                except Month11Journal.DoesNotExist:
-                    jour = None
-                    
-                present= jour and getattr(jour,'day%s' % day, False)
-                if present:
-                    error = u"Этот сотрудник дежурит на 11-00 !!! \nСделайте изменения в том журнале или назначте другого сотрудника."
-                #Проверка дежурных в этом же журнале  
-                try:
-                    jour = Month8Journal.objects.all().filter(date=month)
-                except Month8Journal.DoesNotExist:
-                    jour = None
-                for unit in jour:
-                    present = unit and getattr(unit, 'day%s' % day, False)
-                    if present:
-                        if error == '':
-                            error = u'Вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s!' % unit.worker
-                        else:
-                            error = error + u'\nТакже вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s !' % unit.worker 
-                #Проверка дежурного в отпуске
-                try:
-                    jour = Month2Journal.objects.get(worker=worker,date=month)
-                except Month2Journal.DoesNotExist:
-                    jour = None
-                    
-                present= jour and getattr(jour,'day%s' % day, False)
-                if present:
-                    if error == '':
-                        error = u'Этот сотрудник в отпуске'
-                    else:
-                        error = error + u'\nТакже этот сотрудник в отпуске'
-                
-            elif jid == '11':
-                #Проверка дежурного в другом журнале
-                try:
-                    jour = Month8Journal.objects.get(worker=worker,date=month)
-                except Month8Journal.DoesNotExist:
-                    jour = None
-                
-                present= jour and getattr(jour,'day%s' % day, False)
-                if present:
-                    error = u"Этот сотрудник дежурит на 8-00 !!! \nСделайте изменения в том журнале или назначте другого сотрудника."                
-                
-                #Проверка дежурных в этом же журнале
-                try:
-                    jour = Month11Journal.objects.all().filter(date=month)
-                except Month11Journal.DoesNotExist:
-                    jour = None
-                    
-                for unit in jour:
-                    present = unit and getattr(unit, 'day%s' % day, False)
-                    if present:
-                        if error == '':
-                            error = u'Вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s!' % unit.worker
-                        else:
-                            error = error + u'\nТакже вы пытаетесь назначить второго сотрудника на дежурство в этот день. \nУже дежурным назначен %s !' % unit.worker
-                #Проверка дежурного в отпуске
-                try:
-                    jour = Month2Journal.objects.get(worker=worker,date=month)
-                except Month2Journal.DoesNotExist:
-                    jour = None
-                    
-                present= jour and getattr(jour,'day%s' % day, False)
-                if present:
-                    if error == '':
-                        error = u'Этот сотрудник в отпуске'
-                    else:
-                        error = error + u'\nТакже этот сотрудник в отпуске'
-            elif jid == '2':
-                #Проверка сотрудника на дежурства
-                #8-00
-                try:
-                    jour = Month8Journal.objects.get(worker=worker,date=month)
-                except Month8Journal.DoesNotExist:
-                    jour = None
-                    
-                present= jour and getattr(jour,'day%s' % day, False)
-                if present:
-                    error = u"Этот сотрудник дежурит на 8-00 !!!"
-                #11-00    
-                try:
-                    jour = Month11Journal.objects.get(worker=worker,date=month)
-                except Month11Journal.DoesNotExist:
-                    jour = None
-                
-                present= jour and getattr(jour,'day%s' % day, False)
-                if present:
-                    error = u"Этот сотрудник дежурит на 11-00 !!!"
-                #Праздники
-                try:
-                    jour = Month1Journal.objects.get(worker=worker,date=month)
-                except Month1Journal.DoesNotExist:
-                    jour = None
-                
-                present= jour and getattr(jour,'day%s' % day, False)
-                if present:
-                    error = u"Этот сотрудник дежурит в этот день !!!"
-                
-                #Субботы
-                try:
-                    jour = Month7Journal.objects.get(worker=worker,date=month)
-                except Month7Journal.DoesNotExist:
-                    jour = None
-                
-                present= jour and getattr(jour,'day%s' % day, False)
-                if present:
-                    error = u"Этот сотрудник дежурит в эту субботу !!!"
-            else:
-                pass
-            
-            return error
+            journal = Month8Journal.objects.get_or_create(worker=worker,date=month)[0] 
         
         error = ''
         if present:
-            error = valid_journal(jid,worker,month,day)        
+            error = valid_journal(jid,worker,month,day) 
         
         if not error:
             setattr(journal, 'day%d' % current_date.day, present) 
