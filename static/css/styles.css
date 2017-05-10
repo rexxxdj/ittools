@@ -52,3 +52,7 @@ table {
 .alert {
     margin-top: 70px;
 }
+
+.checked {
+    background-color: #5a8ce5;
+}

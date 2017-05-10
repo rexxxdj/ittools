@@ -92,7 +92,7 @@
                 </td>
                 {% for day in unit.days %}
                 
-                <td class="day-box 
+                <td class="day-box {% if day.present %} checked {% endif %}
                            {% if jid == "8" or jid == "11" %}
                                 {% if day.verbose == 'Sa' or day.verbose == 'Su' %} celebrated {% endif %}                            
                            {% endif %}
@@ -109,7 +109,7 @@
                                value="1"
                                {% if perms.services.add_services %} 
                                {% else %}
-                                readonly 
+                                disabled 
                                {% endif %}
                                {% if day.present %}
                                 checked="checked" 
@@ -125,7 +125,7 @@
                                value="1"
                                {% if perms.services.add_services %} 
                                {% else %}
-                                readonly 
+                                disabled 
                                {% endif %}
                                {% if day.present %}
                                 checked="checked" 
